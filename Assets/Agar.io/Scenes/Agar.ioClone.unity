@@ -132,11 +132,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 141643971}
-  - component: {fileID: 141643976}
   - component: {fileID: 141643975}
-  - component: {fileID: 141643974}
   - component: {fileID: 141643973}
   - component: {fileID: 141643972}
+  - component: {fileID: 141643976}
+  - component: {fileID: 141643977}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -196,20 +196,6 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
---- !u!114 &141643974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 141643970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0
 --- !u!114 &141643975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +214,20 @@ MonoBehaviour:
   visibility: 0
   hasSpawned: 0
 --- !u!114 &141643976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141643970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: 0
+--- !u!114 &141643977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -259,8 +259,8 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 8176318522131795436, guid: 1f7f94943857c554cbd4ac5c91b022e1, type: 3}
+  - {fileID: 3194766276358073817, guid: 759744d75537ba449993f0530699cd94, type: 3}
   - {fileID: 2493572181021788530, guid: 18e55379730442a4e9cc257a0d4d8b7c, type: 3}
-  - {fileID: 6100839864127683933, guid: fb5118a3650505246826a411e2b76893, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -581,7 +581,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 178.68701, y: -56.8675}
+  m_AnchoredPosition: {x: 178.68701, y: -56.867554}
   m_SizeDelta: {x: 297.3741, y: 80.265}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &437729536
@@ -800,6 +800,38 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &549290212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 549290213}
+  m_Layer: 0
+  m_Name: Spawnners
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &549290213
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549290212}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 599068555}
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &575731333
 GameObject:
   m_ObjectHideFlags: 3
@@ -920,6 +952,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &599068554
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 599068555}
+  - component: {fileID: 599068556}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &599068555
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599068554}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 549290213}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &599068556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599068554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41f84591ce72545258ea98cb7518d8b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &873443508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,67 +1144,6 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!1 &1485005079
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1485005081}
-  - component: {fileID: 1485005080}
-  m_Layer: 0
-  m_Name: ColorManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1485005080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1485005079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16b2e9249a57dfd4f9b6466e5f0bd5b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0.13177824, b: 1, a: 1}
-  - {r: 0, g: 0.94184494, b: 1, a: 1}
-  - {r: 0, g: 1, b: 0.55456924, a: 1}
-  - {r: 0, g: 1, b: 0.12188816, a: 1}
-  - {r: 0.7134913, g: 1, b: 0, a: 1}
-  - {r: 0.9749273, g: 1, b: 0, a: 1}
-  - {r: 1, g: 0.7178551, b: 0, a: 1}
-  - {r: 1, g: 0.543159, b: 0, a: 1}
-  - {r: 0.9530692, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.54859734, a: 1}
-  - {r: 0.64084435, g: 0, b: 1, a: 1}
-  - {r: 0, g: 0.61166286, b: 1, a: 1}
-  - {r: 0, g: 0.76683474, b: 1, a: 1}
-  - {r: 0, g: 1, b: 0.7084837, a: 1}
-  - {r: 0.07529365, g: 0.8490566, b: 0.68801785, a: 1}
---- !u!4 &1485005081
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1485005079}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1729216283}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1619996453
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,19 +1188,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b9163ac7d60f54b85c3fd9c19eeb0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LobbyPanel: {fileID: 8493870763791069442}
-  GamePanel: {fileID: 587541580}
-  FindMatchBtn: {fileID: 8493870764956432391}
+  gameHUD: {fileID: 1886933227}
+  IsFocus: 0
   RandomID: 
   RandomName: 
-  UserName: {fileID: 8493870764107873611}
   myPlayerData:
     PlayerId: 
     PlayerName: 
-  VirtualCamera: {fileID: 1879384933}
-  playerCloneParent: {fileID: 1252837225}
-  PoolMangerParent: {fileID: 1915416091}
-  IsFocus: 0
+    CurrentColor: {r: 0, g: 0, b: 0, a: 0}
+  currentColorPicker: 0
 --- !u!1 &1641751751
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1363,6 @@ Transform:
   - {fileID: 141643971}
   - {fileID: 379752215}
   - {fileID: 1619996454}
-  - {fileID: 1485005081}
   - {fileID: 1886933226}
   m_Father: {fileID: 0}
   m_RootOrder: 11
@@ -1502,7 +1512,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1729216283}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1886933227
 MonoBehaviour:
@@ -1516,8 +1526,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2b19dc97f0918469649554a2a571fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 6100839864127683933, guid: fb5118a3650505246826a411e2b76893, type: 3}
+  Player: {fileID: 3194766276358073817, guid: 759744d75537ba449993f0530699cd94, type: 3}
+  Mass: {fileID: 944413339047114343, guid: 1516729267d23d148819821d2412622b, type: 3}
+  LobbyPanel: {fileID: 8493870763791069442}
+  GamePanel: {fileID: 587541580}
+  VirtualCamera: {fileID: 1879384933}
+  playerCloneParent: {fileID: 1020445549}
+  PoolMangerParent: {fileID: 1915416091}
   ScoreTxt: {fileID: 1641751753}
+  UserName: {fileID: 8493870764107873611}
+  MassPosition: {fileID: 1252837226}
+  FindMatchBtn: {fileID: 8493870764956432391}
 --- !u!1 &1915416091
 GameObject:
   m_ObjectHideFlags: 0

@@ -50,7 +50,7 @@ MonoBehaviour:
   syncInterval: 0
   MassObjs: {fileID: 944413339047114343, guid: 1516729267d23d148819821d2412622b, type: 3}
   pooledObjects: []
-  count: 50
+  count: 5
   currentColorPicker: 0
   activeObjects: []
   Players: []

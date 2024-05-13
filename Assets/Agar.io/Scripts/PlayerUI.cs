@@ -13,70 +13,47 @@ public class PlayerUI : NetworkBehaviour
 
     public SpriteRenderer ProfilePic;
     public string playerID;
+    public PlayerState myPlayerState;
 
 
-    [SyncVar(hook = nameof(OnColorStateChanged))] public Color CurrentColor;
     public bool isMine;
 
     public bool isInit = false;
 
-
-
     private void Awake()
     {
         Instance = this;
+
+      
     }
 
-    //public void SetPlayerName(string newName)
-    //{
-
-    //    PlayerName.text = newName;
-
-    //}
-
-   
-    public void OnColorStateChanged(Color oldColor, Color newColor)
+    public void InitUI()
     {
-        ProfilePic.color = newColor;
-
-    }
+        //Debug.Log($"Init_State ___ 1 ___ Name {myPlayerState.playerData.PlayerName} ___ Col {myPlayerState.CurrentColor.GetHashCode()} ___ init {isInit}");
 
 
-    public void InitUI(PlayerState ps)
-    {
         if (isInit)
             return;
 
-        playerID = ps.playerData.PlayerId;
-        PlayerName.text = ps.playerData.PlayerName;
+        playerID = myPlayerState.playerData.PlayerId;
+        Debug.Log($"Init_State ___ 0 ___ Name {myPlayerState.playerData.PlayerName} ___ Col {myPlayerState.playerData.CurrentColor.GetHashCode()} ___ init {isInit}");
+
+        ProfilePic.color = myPlayerState.playerData.CurrentColor;
+        PlayerName.text = myPlayerState.playerData.PlayerName;
 
         isInit = true;
 
-        if (isLocalPlayer)
-        {
-            (Color col, string val) = PoolManager.Instance.RandomColorGeneration();
-            CmdSetProfileColor(col);
-        }
-        if (playerID == UIController.instance.myPlayerData.PlayerId)
-        {
-            Debug.Log("Player Id --> " + playerID);
-            Debug.Log("Player Id Ui Controller  --> " + UIController.instance.myPlayerData.PlayerId);
-
-            isMine = true;
-
-        }
+        //Debug.Log($"Init_State ___ 2 ___ Name {myPlayerState.playerData.PlayerName} ___ Col {myPlayerState.CurrentColor.GetHashCode()} ___ init {isInit}");
     }
 
-
-  
-
-    [Command]
-    private void CmdSetProfileColor(Color color)
+    public void UpdateUI(PlayerState ps)
     {
-        CurrentColor = color;
+        //Debug.Log($"PLayerSTate UPdated ---> Name {ps.playerData.PlayerName} _____" + ps.CurrentColor);
+        myPlayerState = ps;
+        InitUI();
     }
 
-   
+
 
 }
 

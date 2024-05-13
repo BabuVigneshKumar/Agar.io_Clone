@@ -8,61 +8,48 @@ using TMPro;
 public class UIController : MonoBehaviour
 {
     public static UIController instance;
+    public GameHUD gameHUD;
 
-    public GameObject LobbyPanel, GamePanel;
-    public Button FindMatchBtn;
+    public bool IsFocus;
 
     public string RandomID;
     public string RandomName;
 
-    public TMP_InputField UserName;
-
     public PlayerData myPlayerData;
-    
+    public ColorPick currentColorPicker;
     private void Awake()
     {
         instance = this;
     }
-   
-    public GameObject VirtualCamera;
-    public GameObject playerCloneParent;
-
-    public GameObject PoolMangerParent;
-    public bool IsFocus;
 
     private void OnApplicationFocus(bool focus)
     {
-        //Debug.Log("CHECK ********* " + focus + $" ****** {PlayerMovement.Instance != null}");
+       
         IsFocus = focus;
-        if (focus && PlayerMovement.Instance != null)
+        if (focus && PlayerController.Instance != null)
         {
-            //Debug.Log($"CHECK 1");
-            StopCoroutine(PlayerMovement.Instance.MoveTowardsMouseCoroutine());
-            StartCoroutine(PlayerMovement.Instance.MoveTowardsMouseCoroutine());
-            //Debug.Log($"CHECK 2");
+            Debug.Log("<color=yellow>IsFocus  ^^^  </color>" + IsFocus);
+            //StopCoroutine(PlayerController.Instance.MoveTowardsMouseCoroutine());
+            //StartCoroutine(PlayerController.Instance.MoveTowardsMouseCoroutine());
+            Debug.Log("<color=fusia>IsFocus  ^^^ </color>" + IsFocus);
+
         }
     }
     void Start()
     {
-        FindMatchBtn.onClick.AddListener(() => InitializeData());
-        Invoke(nameof(CallWithDelay), 3f);
+
+        gameHUD.FindMatchBtn.onClick.AddListener(() => InitializeData());
+
     }
 
-    private void CallWithDelay()
-    {
-        if(PoolManager.Instance != null)
-        {
-            //PoolManager.Instance.SpawnAndActivateObjects();
-        }
-    }
+   
 
     public void GamePlayPanel()
     {
-        GamePanel.gameObject.SetActive(true);
-        LobbyPanel.gameObject.SetActive(false);
+        gameHUD.GamePanel.gameObject.SetActive(true);
+        gameHUD.LobbyPanel.gameObject.SetActive(false);
 
     }
-   
 
     public void InitializeData()
     {
@@ -71,10 +58,10 @@ public class UIController : MonoBehaviour
         RandomName = "Player " + Random.Range(0, 100);
 
         myPlayerData.PlayerId = RandomID;
+        myPlayerData.CurrentColor = RandomColorGeneration();
 
 
-
-        RandomName = UserName.text;
+        RandomName = gameHUD.UserName.text;
 
         myPlayerData.PlayerName = RandomName;
         Debug.Log("User NAme ==> " + RandomName);
@@ -100,8 +87,55 @@ public class UIController : MonoBehaviour
         }
         PlayerManager.instance.UpdatePlayerDetails(JsonUtility.ToJson(myPlayerData));
 
-
+      
         PlayerManager.instance.SearchGame();
     }
+
+    public Color RandomColorGeneration()
+    {
+        int randomPick = Random.Range(0, 5);
+
+        currentColorPicker = (ColorPick)randomPick;
+
+        switch (randomPick)
+        {
+            case 0:
+                if (currentColorPicker == ColorPick.Magenta)
+                {
+                    return Color.magenta;
+                }
+                break;
+            case 1:
+                if (currentColorPicker == ColorPick.Blue)
+                {
+                    return Color.blue;
+                }
+                break;
+            case 2:
+                if (currentColorPicker == ColorPick.Red)
+                {
+                    return Color.red;
+                }
+                break;
+            case 3:
+                if (currentColorPicker == ColorPick.Brown)
+                {
+                    return new Color(150f / 255f, 75f / 255f, 0f);
+                }
+                break;
+            case 4:
+                if (currentColorPicker == ColorPick.Green)
+                {
+                    return Color.green;
+
+                }
+                break;
+
+        }
+        return Color.white;
+
+    }
+
+
 
 }

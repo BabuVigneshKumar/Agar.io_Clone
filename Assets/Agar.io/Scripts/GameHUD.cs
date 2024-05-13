@@ -9,9 +9,20 @@ public class GameHUD : MonoBehaviour
     public static GameHUD instance;
 
     public GameObject Player;
-    public TMP_Text ScoreTxt;
+    public GameObject Mass;
+    public GameObject LobbyPanel, GamePanel;
+    public GameObject VirtualCamera;
+    public GameObject playerCloneParent;
+    public GameObject PoolMangerParent;
 
-   
+
+    public TMP_Text ScoreTxt;
+    public TMP_InputField UserName;
+
+    public Transform MassPosition;
+
+    public Button FindMatchBtn;
+
     private void Awake()
     {
         instance = this;

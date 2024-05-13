@@ -16,17 +16,16 @@ public class PoolManager : NetworkBehaviour
     public List<GameObject> activeObjects = new List<GameObject>();
     public List<GameObject> Players = new List<GameObject>();
     public GameManager gameManager;
-
     private void Awake()
     {
         Instance = this;
         map = MapLimits.Instance;
-      
+
     }
     private void Start()
     {
-        
-        //SpawnAndActivateObjects();
+
+        SpawnAndActivateObjects();
         SpawnObjs();
 
     }
@@ -46,7 +45,7 @@ public class PoolManager : NetworkBehaviour
         {
             GameObject CoinObj = Instantiate(MassObjs);
 
-            CoinObj.transform.SetParent(UIController.instance.PoolMangerParent.transform);
+            CoinObj.transform.SetParent(UIController.instance.gameHUD.PoolMangerParent.transform);
 
             pooledObjects.Add(CoinObj);
 
@@ -57,10 +56,10 @@ public class PoolManager : NetworkBehaviour
 
     public GameObject GetPooledObject()
     {
-        GameObject G = UIController.instance.PoolMangerParent.transform.GetChild(0).gameObject;
+        GameObject G = UIController.instance.gameHUD.PoolMangerParent.transform.GetChild(0).gameObject;
         G.transform.SetAsLastSibling();
         return G;
-      
+
     }
 
     public IEnumerator CheckCountMassObj()
@@ -74,7 +73,7 @@ public class PoolManager : NetworkBehaviour
             StartCoroutine(CreateNewMass(currentCount));
         }
         yield return null;
-       
+
     }
 
 
@@ -90,10 +89,10 @@ public class PoolManager : NetworkBehaviour
 
         for (int i = _count; i < (count - _count); i++)
         {
-
-
             Vector2 _pos = new Vector2(Random.Range(-map.Maplimits.x, map.Maplimits.x), Random.Range(-map.Maplimits.y, map.Maplimits.y)) / 2;
-            (Color col, string val) = RandomColorGeneration();
+
+            Color col = RandomColorGeneration();
+
             CollectableData _data = new();
             _data.MyPosition = _pos;
             _data.MyColor = col;
@@ -104,7 +103,7 @@ public class PoolManager : NetworkBehaviour
             ColorCode += 1;
         }
 
-        
+
         Debug.Log(">>>>>> RPC Positions  Server Side ----> " + _newData.Count);
 
         gameManager.UpdateGameStateServer();
@@ -116,11 +115,9 @@ public class PoolManager : NetworkBehaviour
 
     #endregion
 
-
-
     #region Color Generator
 
-    public (Color, string) RandomColorGeneration()
+    public Color RandomColorGeneration()
     {
         int randomPick = Random.Range(0, 5);
 
@@ -132,7 +129,7 @@ public class PoolManager : NetworkBehaviour
                 if (currentColorPicker == ColorPick.Magenta)
                 {
 
-                    return (Color.magenta, "Magenta");
+                    return Color.magenta;
                 }
                 break;
             case 1:
@@ -140,7 +137,7 @@ public class PoolManager : NetworkBehaviour
                 {
 
 
-                    return (Color.blue, "Blue");
+                    return Color.blue;
                 }
                 break;
             case 2:
@@ -148,7 +145,7 @@ public class PoolManager : NetworkBehaviour
                 {
 
 
-                    return (Color.red, "Red");
+                    return Color.red;
 
                 }
                 break;
@@ -156,7 +153,7 @@ public class PoolManager : NetworkBehaviour
                 if (currentColorPicker == ColorPick.Brown)
                 {
 
-                    return (new Color(150f / 255f, 75f / 255f, 0f), "Brown");
+                    return new Color(150f / 255f, 75f / 255f, 0f);
                 }
                 break;
             case 4:
@@ -164,14 +161,14 @@ public class PoolManager : NetworkBehaviour
                 {
 
 
-                    return (Color.green, "Green");
+                    return Color.green;
 
                 }
                 break;
 
         }
 
-        return (Color.white, "White");
+        return Color.white;
 
     }
     #endregion

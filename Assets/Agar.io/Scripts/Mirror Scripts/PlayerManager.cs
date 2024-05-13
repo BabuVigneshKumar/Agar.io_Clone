@@ -1,7 +1,12 @@
+using DG.Tweening.Core.Easing;
 using Mirror;
+
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public class PlayerManager : NetworkBehaviour
@@ -12,69 +17,127 @@ public class PlayerManager : NetworkBehaviour
     [SyncVar] public string PlayerID;
     [SyncVar] public string playerName;
     [SyncVar] public string RoomName;
-    public PlayerState myPlayerState = new PlayerState();
+    [SyncVar] public PlayerState myPlayerState = new PlayerState();
 
     [SyncVar(hook = nameof(OnPlayerStateChanged))] public string myPlayerStateJson;
 
-    public List<PlayerUI> playerUIs = new List<PlayerUI>();
 
+    public List<PlayerUI> playerUI = new List<PlayerUI>();
 
     public NetworkIdentity gameMangerNetId;
     public NetworkMatch networkMatch;
     public GameManager gameManager;
-    public GameObject testChild;
+
+    public GameObject agarPlayerPrefab;
+
+    public Rigidbody2D rb;
+
+    [Header("___Test___")]
+    public bool startTest;
+
+    [Header("PlayerMovements Data")]
+
+    [SyncVar(hook = nameof(OnPositionChanged))] public Vector3 myPosition;
+    [SyncVar(hook = nameof(OnVelocityChange))] public Vector3 myVelocity;
+    [SyncVar] public Vector3 PreviousPos;
 
     private void Awake()
     {
+        agarPlayerPrefab = GameHUD.instance.Player;
+
         if (isLocalPlayer)
             instance = this;
         networkMatch = GetComponent<NetworkMatch>();
     }
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (true || transform.localScale.x > 1 && transform.localScale.y > 1)
+            {
+                CmdServerForSplit(PlayerID);
+            }
+        }
+    }
     public override void OnStartLocalPlayer()
     {
         instance = this;
-
         UpdatePlayerDetails(JsonUtility.ToJson(UIController.instance.myPlayerData));
     }
     public override void OnStartClient()
     {
-
-        //RpcSpawnBall();
         if (isLocalPlayer)
         {
             instance = this;
-
         }
         else
         {
             StartCoroutine(WaitingStatusJoinedPlayer(false));
         }
-
     }
 
 
-
-    public void RpcSpawnBall()
+    #region Movement Data Send
+    [Command]
+    public void SendCoinCollectedData(string _data, double serverTime)
     {
-        if (!isLocalPlayer) return;
-
-
-
-        GameObject BallObj = Instantiate(GameHUD.instance.Player, transform.position, Quaternion.identity);
-
-
-
-
-        if (BallObj != null && this.transform != null)
-        {
-            BallObj.transform.SetParent(this.transform);
-        }
-
-
-
+        gameManager.CoinCollected(_data, PlayerID);
+        gameManager.UpdateGameStateServer();
     }
 
+    [Command]
+    public void CmdSendMovement(Vector3 position, Vector3 velocity, string _playerID, double serverTime)
+    {
+        myPosition = position;
+        PreviousPos = position;
+        myVelocity = velocity;
+       
+    }
+    private void OnPositionChanged(Vector3 oldPositions, Vector3 newPosition)
+    {
+        if (oldPositions != newPosition)
+        {
+            if (isServer)
+            {
+                Debug.Log("Client Position " + newPosition);
 
+                transform.position = newPosition;
+            }
+            else if (isClient && !isLocalPlayer)
+            {
+                Debug.Log("Client Position " + newPosition);
+
+                transform.position = newPosition;
+            }
+        }
+    }
+
+    private void OnVelocityChange(Vector3 oldVelocity, Vector3 newVelocity)
+    {
+        if (oldVelocity != newVelocity)
+        {
+            if (isServer)
+            {
+                Debug.Log("Client Position " + newVelocity);
+
+                rb.velocity = newVelocity;
+            }
+            else if (isClient && !isLocalPlayer)
+            {
+                Debug.Log("Client Position " + newVelocity);
+
+                rb.velocity = newVelocity;
+            }
+        }
+    }
+
+    #endregion
+
+
+    public void OnDisable()
+    {
+        Debug.Log("Destroyed Player Manager !!!");
+    }
 
     [Command]
     public void UpdatePlayerDetails(string JsonData)
@@ -88,29 +151,33 @@ public class PlayerManager : NetworkBehaviour
 
         PlayerState playerState = new PlayerState();
         playerState.playerData = myPlayerDetails;
+
+
         myPlayerStateJson = JsonUtility.ToJson(playerState);
-        Debug.LogError($"Total Player Count -->  {GetComponentsInChildren<PlayerMovement>().Length} ");
-        if (GetComponentsInChildren<PlayerMovement>().Length > 0)
+
+        //if (GetComponentsInChildren<PlayerController>().Length > 0)
+        //{
+        foreach (PlayerController ball in GetComponentsInChildren<PlayerController>())
         {
-            foreach (PlayerMovement ball in GetComponentsInChildren<PlayerMovement>())
-            {
-                Debug.LogError($"Total Player Count FOreachh -->  {GetComponentsInChildren<PlayerMovement>().Length} ");
-
-                ball.MyPlayerID = myPlayerData.PlayerId;
-            }
+            ball.MyPlayerID = myPlayerData.PlayerId;
         }
+        //}
     }
-    //public void OnPlayerNameChanged(string oldName, string newName)
-    //{
-    //    Debug.Log($"Player Name Updated OLd Name --> {oldName}  + New Name {newName}");
-    //    PlayerUI.Instance.SetPlayerName(newName);
-    //}
-
     public void OnPlayerStateChanged(string oldStr, string newStr)
     {
         myPlayerState = JsonUtility.FromJson<PlayerState>(newStr);
-
     }
+
+
+    #region Split 
+    [Command]
+    public void CmdServerForSplit(string _playerID)
+    {
+        gameManager.Split(_playerID);
+    }
+    #endregion
+
+    #region Room Managers
     public void SearchGame()
     {
         SearchGameServer();
@@ -167,7 +234,7 @@ public class PlayerManager : NetworkBehaviour
         }
         else
         {
-            Debug.Log("<color=green> Game Found !!</color>");
+            Debug.Log("<color=green> Game Found !! </color>");
 
             TargetHostGame(false, _matchId);
         }
@@ -221,15 +288,12 @@ public class PlayerManager : NetworkBehaviour
             RoomName = _matchID;
             //UIController.instance.ShowHUD();
             PlayerPrefs.SetString("LastEnteredRoom", _matchID);
-
             StartCoroutine(WaitingStatusJoinedPlayer(true));
         }
 
     }
-
     public IEnumerator WaitingStatusJoinedPlayer(bool IsMine)
     {
-
         while (!gameManager)
         {
             if (GameManager.instance)
@@ -246,41 +310,43 @@ public class PlayerManager : NetworkBehaviour
         StartCoroutine(WaitingNewPlayerInGameState());
 
     }
+
+
+
+
     public void CheckJoinStatus()
     {
         if (!isLocalPlayer) return;
+
+
         foreach (PlayerState playerState in gameManager.gameState.players)
         {
             if (playerState.playerData.PlayerId == myPlayerState.playerData.PlayerId)
             {
                 myPlayerState = playerState;
-
                 return;
             }
         }
-        foreach (PlayerState playerState in gameManager.gameState.WaitingPlayers)
-        {
-            if (playerState.playerData.PlayerId == myPlayerState.playerData.PlayerId)
-            {
-                myPlayerState = playerState;
 
-                return;
-            }
-        }
-        NewJoinedPlayersToWaitingList(JsonUtility.ToJson(myPlayerState));
+
+        //Debug.Log($"Color Values ARe ===> {myPlayerState.CurrentColor.GetHashCode()}   Geenerated Color {col.GetHashCode()}  PlayerName ==> {myPlayerState.playerData.PlayerName} Player Id ==> {myPlayerState.playerData.PlayerId} ");
+        Debug.Log($"Entered To JOined  List  --->>> Name {myPlayerState.playerData.PlayerName} **** Color {myPlayerState.playerData.CurrentColor.GetHashCode()}");
+        CmdAddPlayersToWaitingList(myPlayerDetails.PlayerId, NetworkTime.time, JsonUtility.ToJson(myPlayerState));
 
     }
+
+
+
+
     [Command]
-    public void NewJoinedPlayersToWaitingList(string _playerDetails)
+    public void CmdAddPlayersToWaitingList(string userID, double serverTime, string newPlayerDetails)
     {
-        Debug.Log("Entered To Waiting List ");
-        PlayerState NewplayerState = JsonUtility.FromJson<PlayerState>(_playerDetails);
-        Debug.Log($"Json Player Details {_playerDetails}");
-
-
-
-        gameManager.JoinedWaitingPlayersList(NewplayerState);
-        gameManager.CheckActionRequired();
+        PlayerState NewplayerState = JsonUtility.FromJson<PlayerState>(newPlayerDetails);
+        ServerEvent request = new ServerEvent();
+        request.playerID = userID;
+        request.reqTime = serverTime;
+        request.eventAction = new System.Action(() => gameManager.JoinedWaitingPlayersList(NewplayerState));
+        gameManager.AddServerEvent(request);
 
 
     }
@@ -292,13 +358,8 @@ public class PlayerManager : NetworkBehaviour
         {
             if (gameManager.gameState.players.Exists(x => x.playerData.PlayerId == PlayerID))
             {
-
                 IsPlayerFound = true;
-            }
-            else if (gameManager.gameState.WaitingPlayers.Exists(x => x.playerData.PlayerId == PlayerID))
-            {
 
-                IsPlayerFound = true;
 
             }
             else
@@ -306,32 +367,25 @@ public class PlayerManager : NetworkBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
         }
+        InitPlayerManager();
+
     }
 
-    [Header("___Test___")]
-    public bool startTest;
-    private void Update()
+    public void InitPlayerManager()
     {
+        //foreach (var myUI in playerUIs)
+        //{
+        //    Debug.Log($" Name  --> {myUI.myPlayerState.playerData.PlayerName} ||  Color --> {myUI.myPlayerState.playerData.CurrentColor.GetHashCode()} || ID  --> {myUI.myPlayerState.playerData.PlayerName} ");
 
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            Debug.Log($"TEST_SPLIT ******** 0");
-            if (true || transform.localScale.x > 1 && transform.localScale.y > 1)
-            {
-                TestInfoToServerForSplit(PlayerID);
-                Debug.Log($"TEST_SPLIT ******** 1");
-            }
-        }
+        //    myUI.UpdateUI(myPlayerState);
+        //}
 
     }
+    #endregion
 
 
-    [Command]
-    public void TestInfoToServerForSplit(string _playerID)
-    {
-        Debug.Log($"TEST_SPLIT ******** 2");
-        gameManager.TestSplit(_playerID);
-    }
+
+
 
 
 }

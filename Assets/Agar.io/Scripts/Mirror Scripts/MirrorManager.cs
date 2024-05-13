@@ -14,7 +14,7 @@ public class MirrorManager : NetworkBehaviour
     public SyncList<RoomInfo> roomList = new SyncList<RoomInfo>();
     public GameObject GameManagerPrefab;
     public GameObject PoolManagerPrefab;
-  
+    
     private void Awake()
     {
         instance = this;
@@ -70,7 +70,6 @@ public class MirrorManager : NetworkBehaviour
 
             newPlayer.PlayerId = _PlayerId;
             newPlayer.playerManagerobj = _playerGameObject.GetComponent<PlayerManager>();
-
             Rooms.players.Add(newPlayer);
 
             roomList.Add(Rooms);
