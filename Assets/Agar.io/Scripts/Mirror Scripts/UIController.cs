@@ -16,25 +16,25 @@ public class UIController : MonoBehaviour
     public string RandomName;
 
     public PlayerData myPlayerData;
-    public ColorPick currentColorPicker;
+    //public ColorPick currentColorPicker;
     private void Awake()
     {
         instance = this;
     }
 
-    private void OnApplicationFocus(bool focus)
-    {
+    //private void OnApplicationFocus(bool focus)
+    //{
        
-        IsFocus = focus;
-        if (focus && PlayerController.Instance != null)
-        {
-            Debug.Log("<color=yellow>IsFocus  ^^^  </color>" + IsFocus);
-            //StopCoroutine(PlayerController.Instance.MoveTowardsMouseCoroutine());
-            //StartCoroutine(PlayerController.Instance.MoveTowardsMouseCoroutine());
-            Debug.Log("<color=fusia>IsFocus  ^^^ </color>" + IsFocus);
+    //    IsFocus = focus;
+    //    if (focus && PlayerController.Instance != null)
+    //    {
+    //        Debug.Log("<color=yellow>IsFocus  ^^^  </color>" + IsFocus);
+    //        //StopCoroutine(PlayerController.Instance.MoveTowardsMouseCoroutine());
+    //        //StartCoroutine(PlayerController.Instance.MoveTowardsMouseCoroutine());
+    //        Debug.Log("<color=fusia>IsFocus  ^^^ </color>" + IsFocus);
 
-        }
-    }
+    //    }
+    //}
     void Start()
     {
 
@@ -90,7 +90,7 @@ public class UIController : MonoBehaviour
       
         PlayerManager.instance.SearchGame();
     }
-
+    public ColorPick currentColorPicker;
     public Color RandomColorGeneration()
     {
         int randomPick = Random.Range(0, 5);

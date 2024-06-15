@@ -32,6 +32,7 @@ public class PlayerManager : NetworkBehaviour
 
     public Rigidbody2D rb;
 
+
     [Header("___Test___")]
     public bool startTest;
 
@@ -39,7 +40,13 @@ public class PlayerManager : NetworkBehaviour
 
     [SyncVar(hook = nameof(OnPositionChanged))] public Vector3 myPosition;
     [SyncVar(hook = nameof(OnVelocityChange))] public Vector3 myVelocity;
+
+    [SyncVar(hook = nameof(UpdateSyncScale))] public Vector3 SyncScale;
     [SyncVar] public Vector3 PreviousPos;
+    [SyncVar] public float playerSpeed;
+
+    //[SyncVar] public Vector2 nextScale;
+
 
     private void Awake()
     {
@@ -53,10 +60,10 @@ public class PlayerManager : NetworkBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            if (true || transform.localScale.x > 1 && transform.localScale.y > 1)
-            {
-                CmdServerForSplit(PlayerID);
-            }
+            //if (true || transform.localScale.x > 1 && transform.localScale.y > 1)
+            //{
+            CmdServerForSplit();
+            //}
         }
     }
     public override void OnStartLocalPlayer()
@@ -78,21 +85,41 @@ public class PlayerManager : NetworkBehaviour
 
 
     #region Movement Data Send
-    [Command]
-    public void SendCoinCollectedData(string _data, double serverTime)
-    {
-        gameManager.CoinCollected(_data, PlayerID);
-        gameManager.UpdateGameStateServer();
-    }
+
 
     [Command]
-    public void CmdSendMovement(Vector3 position, Vector3 velocity, string _playerID, double serverTime)
+    public void CmdSendMovement(Vector3 position, Vector3 velocity)
     {
         myPosition = position;
         PreviousPos = position;
         myVelocity = velocity;
-       
     }
+
+    [Command]
+    public void CmdSendPlayerScale(Vector3 _size)
+    {
+        Debug.Log("Transform local Scale Server --> " + _size);
+
+        SyncScale = _size;
+    }
+
+    public void UpdateSyncScale(Vector3 _OldSizeValue, Vector3 _NewSizeValue)
+    {
+        if (_OldSizeValue != _NewSizeValue)
+        {
+            if (isServer)
+            {
+                transform.localScale = _NewSizeValue;
+            }
+            else if (isClient)
+            {
+                transform.localScale = _NewSizeValue;
+            }
+
+        }
+
+    }
+
     private void OnPositionChanged(Vector3 oldPositions, Vector3 newPosition)
     {
         if (oldPositions != newPosition)
@@ -130,7 +157,14 @@ public class PlayerManager : NetworkBehaviour
             }
         }
     }
-
+    #endregion
+    int _pointss;
+    #region CoinData
+    [Command]
+    public void SendCoinCollectedData(string _data, double serverTime, string playerId)
+    {
+        gameManager.CoinCollected(_data, PlayerID);
+    }
     #endregion
 
 
@@ -155,26 +189,36 @@ public class PlayerManager : NetworkBehaviour
 
         myPlayerStateJson = JsonUtility.ToJson(playerState);
 
-        //if (GetComponentsInChildren<PlayerController>().Length > 0)
-        //{
+
         foreach (PlayerController ball in GetComponentsInChildren<PlayerController>())
         {
             ball.MyPlayerID = myPlayerData.PlayerId;
+
         }
-        //}
+
+
     }
     public void OnPlayerStateChanged(string oldStr, string newStr)
     {
         myPlayerState = JsonUtility.FromJson<PlayerState>(newStr);
+
+        GameHUD.instance.ScoreTxt.text = myPlayerState.Points.ToString();
+        rb.mass = myPlayerState.Points;
     }
+
+
 
 
     #region Split 
+
     [Command]
-    public void CmdServerForSplit(string _playerID)
+    public void CmdServerForSplit()
     {
-        gameManager.Split(_playerID);
+        float halfMass = rb.mass / 2;
+        gameManager.Split(PlayerID, agarPlayerPrefab, halfMass);
     }
+
+
     #endregion
 
     #region Room Managers
@@ -208,7 +252,6 @@ public class PlayerManager : NetworkBehaviour
         else
         {
             Debug.Log("<color=green> Game Found !!</color>");
-            //PlayerPrefs.SetString("LastEnteredRoom", _matchID);
 
             UIController.instance.GamePlayPanel();
             StartCoroutine(WaitingStatusJoinedPlayer(true));
@@ -229,6 +272,8 @@ public class PlayerManager : NetworkBehaviour
         {
             networkMatch.matchId = _matchId.ToGuID();
             gameManager = gameMangerNetId.GetComponent<GameManager>();
+
+            PoolManager.Instance.gameManager = gameManager;
             Debug.Log("<color=fusia> Game Host Check to the  Server !!</color>");
             TargetHostGame(true, _matchId);
         }
@@ -269,8 +314,6 @@ public class PlayerManager : NetworkBehaviour
         if (MirrorManager.instance.JoinGame(_matchID, PlayerID, gameObject, out gameMangerNetId))
         {
             networkMatch.matchId = _matchID.ToGuID();
-
-
             gameManager = gameMangerNetId.GetComponent<GameManager>();
             TargetJoinGame(true, _matchID);
         }
@@ -286,7 +329,7 @@ public class PlayerManager : NetworkBehaviour
         if (success)
         {
             RoomName = _matchID;
-            //UIController.instance.ShowHUD();
+
             PlayerPrefs.SetString("LastEnteredRoom", _matchID);
             StartCoroutine(WaitingStatusJoinedPlayer(true));
         }
@@ -312,12 +355,9 @@ public class PlayerManager : NetworkBehaviour
     }
 
 
-
-
     public void CheckJoinStatus()
     {
         if (!isLocalPlayer) return;
-
 
         foreach (PlayerState playerState in gameManager.gameState.players)
         {
@@ -327,17 +367,9 @@ public class PlayerManager : NetworkBehaviour
                 return;
             }
         }
-
-
-        //Debug.Log($"Color Values ARe ===> {myPlayerState.CurrentColor.GetHashCode()}   Geenerated Color {col.GetHashCode()}  PlayerName ==> {myPlayerState.playerData.PlayerName} Player Id ==> {myPlayerState.playerData.PlayerId} ");
         Debug.Log($"Entered To JOined  List  --->>> Name {myPlayerState.playerData.PlayerName} **** Color {myPlayerState.playerData.CurrentColor.GetHashCode()}");
         CmdAddPlayersToWaitingList(myPlayerDetails.PlayerId, NetworkTime.time, JsonUtility.ToJson(myPlayerState));
-
     }
-
-
-
-
     [Command]
     public void CmdAddPlayersToWaitingList(string userID, double serverTime, string newPlayerDetails)
     {
@@ -347,8 +379,6 @@ public class PlayerManager : NetworkBehaviour
         request.reqTime = serverTime;
         request.eventAction = new System.Action(() => gameManager.JoinedWaitingPlayersList(NewplayerState));
         gameManager.AddServerEvent(request);
-
-
     }
     public IEnumerator WaitingNewPlayerInGameState()
     {
@@ -359,28 +389,15 @@ public class PlayerManager : NetworkBehaviour
             if (gameManager.gameState.players.Exists(x => x.playerData.PlayerId == PlayerID))
             {
                 IsPlayerFound = true;
-
-
             }
             else
             {
                 yield return new WaitForSeconds(0.2f);
             }
         }
-        InitPlayerManager();
 
     }
 
-    public void InitPlayerManager()
-    {
-        //foreach (var myUI in playerUIs)
-        //{
-        //    Debug.Log($" Name  --> {myUI.myPlayerState.playerData.PlayerName} ||  Color --> {myUI.myPlayerState.playerData.CurrentColor.GetHashCode()} || ID  --> {myUI.myPlayerState.playerData.PlayerName} ");
-
-        //    myUI.UpdateUI(myPlayerState);
-        //}
-
-    }
     #endregion
 
 

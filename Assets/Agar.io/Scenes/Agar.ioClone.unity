@@ -157,7 +157,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1729216283}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &141643972
 MonoBehaviour:
@@ -260,7 +260,6 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 8176318522131795436, guid: 1f7f94943857c554cbd4ac5c91b022e1, type: 3}
   - {fileID: 3194766276358073817, guid: 759744d75537ba449993f0530699cd94, type: 3}
-  - {fileID: 2493572181021788530, guid: 18e55379730442a4e9cc257a0d4d8b7c, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -493,7 +492,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1729216283}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &379752216
 MonoBehaviour:
@@ -511,7 +510,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   GameManagerPrefab: {fileID: 8176318522131795436, guid: 1f7f94943857c554cbd4ac5c91b022e1, type: 3}
-  PoolManagerPrefab: {fileID: 2493572181021788530, guid: 18e55379730442a4e9cc257a0d4d8b7c, type: 3}
 --- !u!114 &379752217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -735,7 +733,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 150
+  orthographic size: 600
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1174,7 +1172,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1729216283}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1619996455
 MonoBehaviour:
@@ -1360,6 +1358,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4501631794473940982}
   - {fileID: 141643971}
   - {fileID: 379752215}
   - {fileID: 1619996454}
@@ -1450,7 +1449,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 150
+    OrthographicSize: 600
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -1512,7 +1511,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1729216283}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1886933227
 MonoBehaviour:
@@ -1533,6 +1532,7 @@ MonoBehaviour:
   VirtualCamera: {fileID: 1879384933}
   playerCloneParent: {fileID: 1020445549}
   PoolMangerParent: {fileID: 1915416091}
+  gameManager: {fileID: 0}
   ScoreTxt: {fileID: 1641751753}
   UserName: {fileID: 8493870764107873611}
   MassPosition: {fileID: 1252837226}
@@ -2115,6 +2115,56 @@ Transform:
   m_Father: {fileID: 2318854387225855973}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4501631794473940977
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4501631794473940982}
+  - component: {fileID: 4501631794473940983}
+  m_Layer: 0
+  m_Name: PoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4501631794473940982
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4501631794473940977}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1729216283}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4501631794473940983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4501631794473940977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88ce81ab9972d8641a94ec7a9fe20a2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MassObjs: {fileID: 944413339047114343, guid: 1516729267d23d148819821d2412622b, type: 3}
+  pooledObjects: []
+  count: 5
+  activeObjects: []
+  Players: []
+  gameManager: {fileID: 0}
 --- !u!224 &8493870763614122209
 RectTransform:
   m_ObjectHideFlags: 0

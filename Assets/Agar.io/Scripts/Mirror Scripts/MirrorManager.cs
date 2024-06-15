@@ -13,7 +13,7 @@ public class MirrorManager : NetworkBehaviour
     public SyncList<string> RoomIds = new SyncList<string>();
     public SyncList<RoomInfo> roomList = new SyncList<RoomInfo>();
     public GameObject GameManagerPrefab;
-    public GameObject PoolManagerPrefab;
+    //public GameObject PoolManagerPrefab;
     
     private void Awake()
     {
@@ -54,13 +54,8 @@ public class MirrorManager : NetworkBehaviour
             GameObject gm = Instantiate(GameManagerPrefab);
             NetworkServer.Spawn(gm);
 
-            GameObject Pm = Instantiate(PoolManagerPrefab);
-            NetworkServer.Spawn(Pm);
-
-            Pm.GetComponent<PoolManager>().gameManager = gm.GetComponent<GameManager>();
-
+    
             gm.GetComponent<GameManager>().networkMatch.matchId = _matchId.ToGuID();
-
             RoomInfo Rooms = new RoomInfo();
 
             Rooms.roomName = _matchId;

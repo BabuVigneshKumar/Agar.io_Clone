@@ -14,7 +14,7 @@ public class GameHUD : MonoBehaviour
     public GameObject VirtualCamera;
     public GameObject playerCloneParent;
     public GameObject PoolMangerParent;
-
+    public GameObject gameManager;
 
     public TMP_Text ScoreTxt;
     public TMP_InputField UserName;

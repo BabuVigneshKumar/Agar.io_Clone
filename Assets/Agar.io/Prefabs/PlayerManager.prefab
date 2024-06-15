@@ -215,7 +215,7 @@ Transform:
   m_GameObject: {fileID: 4655693874979930436}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.79999995, y: 0.79999995, z: 0.79999995}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4655693875810539518}
@@ -292,18 +292,21 @@ MonoBehaviour:
   syncInterval: 0
   MyPlayerID: 
   isLocal: 0
+  maxSpeed: 1000
+  minSpeed: 1
+  nextScale: {x: 0, y: 0}
   rb: {fileID: 4655693874979930445}
   gameHUD: {fileID: 0}
   LocalPostion: {x: 0, y: 0, z: 0}
-  Speed: 5
+  Speed: 240
   ScaleFactor: 1
   IsMove: 0
-  Points: 0
+  AdjustmentSpeed: 0
   checkorthoSizeTime: 0.05
   playerTransform: {fileID: 4655693874979930437}
-  offset: 2
+  cameraLock: {fileID: 0}
   VC: {fileID: 0}
-  playerManager: {fileID: 6577312489725888200}
+  nextOrthographicSize: 0
 --- !u!114 &8963416316464331428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +332,8 @@ MonoBehaviour:
       CurrentColor: {r: 0, g: 0, b: 0, a: 0}
     CurrentState: 0
     Points: 0
+    speed: 0
+    NextScale: {x: 0, y: 0}
   isMine: 0
   isInit: 0
 --- !u!58 &4655693874979930446
@@ -486,6 +491,8 @@ MonoBehaviour:
       CurrentColor: {r: 0, g: 0, b: 0, a: 0}
     CurrentState: 0
     Points: 0
+    speed: 0
+    NextScale: {x: 0, y: 0}
   myPlayerStateJson: 
   playerUI:
   - {fileID: 8963416316464331428}
@@ -498,6 +505,8 @@ MonoBehaviour:
   myPosition: {x: 0, y: 0, z: 0}
   myVelocity: {x: 0, y: 0, z: 0}
   PreviousPos: {x: 0, y: 0, z: 0}
+  playerSpeed: 0
+  nextScale: {x: 0, y: 0}
 --- !u!114 &6577312489725888202
 MonoBehaviour:
   m_ObjectHideFlags: 0

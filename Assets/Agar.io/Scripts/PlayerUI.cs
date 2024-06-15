@@ -24,13 +24,35 @@ public class PlayerUI : NetworkBehaviour
     {
         Instance = this;
 
-      
+        Debug.Log($" Player>> Transform Position  0 >> {transform.position}");
     }
 
     public void InitUI()
     {
         //Debug.Log($"Init_State ___ 1 ___ Name {myPlayerState.playerData.PlayerName} ___ Col {myPlayerState.CurrentColor.GetHashCode()} ___ init {isInit}");
 
+        /// ------
+        Debug.Log($" Player>> Transform Position 1 >> {transform.position}");
+        /// 
+        Debug.Log($" Player>> {GameManager.instance.gameState.players.Count}");
+
+        //for (int i = 0; i < GameManager.instance.gameState.players.Count; i++)
+        //{
+        //    if (i == 0)
+        //    {
+        //        Debug.Log("First Player>> " + myPlayerState.playerData.PlayerName);
+
+        //        transform.position = Vector3.zero;
+        //    }
+        //    else if (i == 1)
+        //    {
+        //        Debug.Log("Sceond Player>>" + myPlayerState.playerData.PlayerName);
+        //        transform.position = new Vector3(5f, 0, 0);
+        //    }
+        //}
+        Debug.Log($" Player>> Transform Position 2 >> {transform.position}");
+
+        /// ------
 
         if (isInit)
             return;
@@ -42,7 +64,6 @@ public class PlayerUI : NetworkBehaviour
         PlayerName.text = myPlayerState.playerData.PlayerName;
 
         isInit = true;
-
         //Debug.Log($"Init_State ___ 2 ___ Name {myPlayerState.playerData.PlayerName} ___ Col {myPlayerState.CurrentColor.GetHashCode()} ___ init {isInit}");
     }
 

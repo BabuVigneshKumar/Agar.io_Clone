@@ -15,6 +15,8 @@ public class GameState
 
     public List<RoomInfo> rooms = new List<RoomInfo>();
 
+    public List<PlayerController> myPlayers = new List<PlayerController>(); 
+
     public List<CollectableData> collectableDatas = new List<CollectableData>();
 }
 [System.Serializable]
@@ -23,7 +25,8 @@ public class PlayerState
     public PlayerData playerData = new PlayerData();
     public int CurrentState = 0;
     public int Points;
-   
+    public float speed;
+    public Vector2 NextScale;
 
 }
 
