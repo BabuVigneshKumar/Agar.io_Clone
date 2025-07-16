@@ -183,7 +183,7 @@ public class PlayerController : NetworkBehaviour
 
             }
         }
-        rb.velocity = velocity;
+        rb.linearVelocity = velocity;
 
     }
     public Vector3 GrowPlayer()

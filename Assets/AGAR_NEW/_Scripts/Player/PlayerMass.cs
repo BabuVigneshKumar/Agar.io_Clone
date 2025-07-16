@@ -39,11 +39,11 @@ public class PlayerMass : MonoBehaviour
         Vector3 velo = Vector3.zero;
         if(fakeParent != null)
         {
-            velo = fakeParent.rigidBody.velocity;
+            velo = fakeParent.rigidBody.linearVelocity;
         }
         else if(fakeParentClone != null)
         {
-            velo = fakeParentClone.rigidBody.velocity;
+            velo = fakeParentClone.rigidBody.linearVelocity;
         }
 
         if(velo != Vector3.zero)

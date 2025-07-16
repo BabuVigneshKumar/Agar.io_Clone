@@ -56,7 +56,7 @@ public class Virus : MonoBehaviour
         switch(other.gameObject.tag)
         {
             case "PlayerMass":
-                if(other.attachedRigidbody.velocity != Vector2.zero)
+                if(other.attachedRigidbody.linearVelocity != Vector2.zero)
                 {
                     rigidBody.AddForce(-(other.GetComponent<PlayerMass>().fakeParent.transform.position - transform.position) * 10, ForceMode2D.Impulse);
                 }

@@ -147,13 +147,13 @@ public class PlayerManager : NetworkBehaviour
             {
                 Debug.Log("Client Position " + newVelocity);
 
-                rb.velocity = newVelocity;
+                rb.linearVelocity = newVelocity;
             }
             else if (isClient && !isLocalPlayer)
             {
                 Debug.Log("Client Position " + newVelocity);
 
-                rb.velocity = newVelocity;
+                rb.linearVelocity = newVelocity;
             }
         }
     }

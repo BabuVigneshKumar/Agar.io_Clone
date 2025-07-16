@@ -79,13 +79,13 @@ public class PlayerBlob : MonoBehaviour
 
         DevControls();
 
-        if(rigidBody.drag < 10)
+        if(rigidBody.linearDamping < 10)
         {
-            rigidBody.drag += 0.03f;
+            rigidBody.linearDamping += 0.03f;
         }
-        else if(rigidBody.drag > 10)
+        else if(rigidBody.linearDamping > 10)
         {
-            rigidBody.drag = 10;
+            rigidBody.linearDamping = 10;
         }
 
         Vector2 scale = transform.localScale;
@@ -407,7 +407,7 @@ public class PlayerBlob : MonoBehaviour
 
         spawned = false;
 
-        rigidBody.velocity = Vector2.zero;
+        rigidBody.linearVelocity = Vector2.zero;
         rigidBody.mass = MASS_MIN;
         totalMass = MASS_MIN;
 
@@ -847,30 +847,30 @@ public class PlayerBlob : MonoBehaviour
 
     public void SwapWithClone(PlayerClone clone)
     {
-        float parentDrag = rigidBody.drag;
-        Vector3 parentVelocity = rigidBody.velocity;
+        float parentDrag = rigidBody.linearDamping;
+        Vector3 parentVelocity = rigidBody.linearVelocity;
         Vector3 parentPosition = transform.position;
         Vector3 parentScale = transform.localScale;
         Vector3 parentNextScale = nextScale;
         float parentMass = rigidBody.mass;
 
-        float cloneDrag = clone.rigidBody.drag;
-        Vector3 cloneVelocity = clone.rigidBody.velocity;
+        float cloneDrag = clone.rigidBody.linearDamping;
+        Vector3 cloneVelocity = clone.rigidBody.linearVelocity;
         Vector3 clonePosition = clone.transform.position;
         Vector3 cloneScale = clone.transform.localScale;
         Vector3 cloneNextScale = clone.nextScale;
         float cloneMass = clone.rigidBody.mass;
 
         rigidBody.mass = cloneMass;
-        rigidBody.drag = cloneDrag;
-        rigidBody.velocity = cloneVelocity;
+        rigidBody.linearDamping = cloneDrag;
+        rigidBody.linearVelocity = cloneVelocity;
         transform.position = clonePosition;
         setScale(cloneScale, true);
         shrink(0.1f);
 
         clone.rigidBody.mass = parentMass;
-        clone.rigidBody.drag = parentDrag;
-        clone.rigidBody.velocity = parentVelocity;
+        clone.rigidBody.linearDamping = parentDrag;
+        clone.rigidBody.linearVelocity = parentVelocity;
         clone.transform.position = parentPosition;
         clone.setScale(parentScale, true);
         clone.shrink(0.1f);

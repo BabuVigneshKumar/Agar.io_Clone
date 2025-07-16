@@ -42,13 +42,13 @@ public class AIClone : MonoBehaviour
 
     private void FixedUpdate() 
     {
-        if(rigidBody.drag < 10)
+        if(rigidBody.linearDamping < 10)
         {
-            rigidBody.drag += 0.03f;
+            rigidBody.linearDamping += 0.03f;
         }
-        else if(rigidBody.drag > 10)
+        else if(rigidBody.linearDamping > 10)
         {
-            rigidBody.drag = 10;
+            rigidBody.linearDamping = 10;
         }
 
         if(rigidBody.mass > fakeParent.rigidBody.mass)
